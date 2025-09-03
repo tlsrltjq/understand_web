@@ -6,6 +6,70 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <h1>점심 메뉴 추천</h1>
+    <form class="result" method="get">
+        <label for ="spicy">맵기 정도는?</label>
+        <select name="spicy" id="spicy">
+            <option value="1">안 매움</option>
+            <option value="2">조금 매움</option>
+            <option value="3">조금 더 매움</option>
+            <option value="4">매움</option>
+            <option value="5">많이 매움</option>
+            <option value="6">더 많이 매움</option>
+            <option value="7">못 먹을 정도로 매움</option>
+            <option value="8">죽음</option>
+        </select><br><br>
+
+        <label for="mon">예산</label>
+        <input type="range" id="mon" name="mon" min="0" max="50000" step="1000" value="25000" oninput="this.nextElementSibling.value = this.value"><br>
+        <output id="mon_output">25000</output>원<br><br>
+        
+        <label>음식 종류</label><br><br>
+        <input type="radio" id="type_korean" name="type" value="한식">
+        <label for="type_korean">한식</label><br><br>
+        <input type="radio" id="type_chinese" name="type" value="중식">
+        <label for="type_chinese">중식</label><br><br>
+        <input type="radio" id="type_japanese" name="type" value="일식">
+        <label for="type_japanese">일식</label><br><br>
+        <input type="radio" id="type_western" name="type" value="양식">
+        <label for="type_western">양식</label><br><br>
+
+
+        <label for="text">오늘의 기분은 ?</label><br><br>
+        <input type="text" id="text" name="text" placeholder="기분을 입력하세요"><br><br><br><br>
+
+        <input type="submit">추천 받기</button>
+    </form>
+
+    <script>
+        //예산 레인지 조절
+    const monInput = document.getElementById('mon');
+    const monOutput = document.getElementById('mon_output');
+
+    monInput.addEventListener('input', () => {
+        monOutput.value = monInput.value;
+    });
+
+    //콘솔에 값 출력
+    document.querySelector('form').addEventListener('submit', async e => { //서밋누름
+	    e.preventDefault();//새로고침 방지
+	    const spicy = document.getElementById('spicy').value;
+        console.log("맵기 " + spicy);
+        const mon = document.getElementById('mon').value;
+        console.log("예산 " + mon);
+        const type = document.querySelector('input[name="type"]:checked')?.value || '선택 안 함';
+        console.log("음식종류 " + type);
+        const text = document.getElementById('text').value;
+        console.log("기분 " + text);
+
+        alert(`점심메뉴는 이걸로 추천 : ${type} (맵기 ${spicy}, 예산 ${mon}원, 기분: ${text})`);
+    });
+
+    //나중에 생각나면 해보기..
+/*    fetch("https://6863bafe88359a373e960f61.mockapi.io/sparta/web/:endpoint")
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error)); */
+    </script>
 </body>
 </html>
