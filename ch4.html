@@ -18,12 +18,12 @@
             <option value="4">많이 매움</option>
             <option value="5">더 많이 매움</option>
             <option value="6">못 먹을 정도로 매움</option>
-            <option value="7">죽음</option>
+            <option value="7">매우 매움</option>
         </select><br><br>
 
-        <label for="mon">예산</label>
-        <input type="range" id="mon" name="mon" min="0" max="50000" step="1000" value="25000" oninput="this.nextElementSibling.value = this.value"><br>
-        <output id="mon_output">25000</output>원<br><br>
+        <label for="price">예산</label>
+        <input type="range" id="price" name="price" min="0" max="50000" step="1000" value="25000" oninput="this.nextElementSibling.value = this.value"><br>
+        <output id="priceOutput">25000</output>원<br><br>
         
         <label>음식 종류</label><br><br>
         <input type="radio" id="type_korean" name="type" value="한식">
@@ -36,16 +36,16 @@
         <label for="type_western">양식</label><br><br>
 
 
-        <label for="text">오늘의 기분은 ?</label><br><br>
-        <input type="text" id="text" name="text" placeholder="기분을 입력하세요"><br><br><br><br>
+        <label for="mood">오늘의 기분은 ?</label><br><br>
+        <input type="text" id="mood" name="text" placeholder="기분을 입력하세요"><br><br><br><br>
 
         <input type="submit">추천 받기</button>
     </form>
 
     <script>
         //예산 레인지 조절
-    const monInput = document.getElementById('mon');
-    const monOutput = document.getElementById('mon_output');
+    const monInput = document.getElementById("price");
+    const monOutput = document.getElementById("priceOutput");
     monInput.addEventListener('input', () => {
         monOutput.value = monInput.value;
     });
@@ -69,20 +69,20 @@
         
     }*/
     //콘솔에 값 출력
-    document.querySelector('form').addEventListener('submit', async e => { //서밋누름
+    document.getElementById("result").addEventListener('submit', async e => { //서밋누름
 	    e.preventDefault();//새로고침 방지
 	    const spicy = document.getElementById('spicy').value;
         console.log("맵기 " + spicy);
-        const mon = document.getElementById('mon').value;
-        console.log("예산 " + mon);
+        const price = document.getElementById('price').value;
+        console.log("예산 " + price);
         const type = document.querySelector('input[name="type"]:checked')?.value || '선택 안 함';
         console.log("음식종류 " + type);
-        const text = document.getElementById('text').value;
-        console.log("기분 " + text);
+        const mood = document.getElementById('mood').value;
+        console.log("기분 " + mood);
 
         //const menu = await fetchDate();
 
-        alert(`점심메뉴는 이걸로 추천 : ${type} (맵기 ${spicy}, 예산 ${mon}원, 기분: ${text})`);
+        alert(`점심메뉴는 이걸로 추천 : ${type} (맵기 ${spicy}, 예산 ${price}원, 기분: ${mood})`); //+ menu
     });
 
     </script>
