@@ -1,0 +1,122 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fafafa;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    line-height: 1.5;
+}
+
+h2 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 12px;
+    border-left: 5px solid #4CAF50;
+    padding-left: 8px;
+}
+
+
+.profile {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.profile img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+.profile .text h1 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.profile .text p {
+    margin: 5px 0 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* 기술 스택 */
+.skill {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.skill ul {
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.skill li {
+    background: #f0f0f0;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+}
+
+
+.field {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+
+.interest-table {
+    border-collapse: separate;      
+    border-spacing: 10px;           
+    width: 100%;
+}
+
+.interest-table td {
+    background: #f0f0f0;
+    color: #663c3c;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    border: 2px solid  #555;
+}
+
+
+.contact {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.contact ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.contact li {
+    font-size: 14px;
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.contact a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.contact a:hover {
+    text-decoration: underline;
+}

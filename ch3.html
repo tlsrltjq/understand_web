@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="todo.css"> 
+    <title>To Do List</title>
+</head>
+<body>
+    <h1>할 일 목록</h1>
+
+    <textarea id="todoInput" rows="2" placeholder="할 일을 입력하세요"></textarea><br>
+    
+    <button type="button" onclick="add()">추가</button>
+    
+    <ul id="todoList"></ul>
+    <script>
+    function add() {
+        const todoInput = document.getElementById("todoInput");
+        const value = todoInput.value.trim();
+
+        if (value === "") return;
+
+        const li = document.createElement("li");
+
+        const span = document.createElement("span");
+        span.textContent = value;
+
+        const editBtn = document.createElement("button");
+        editBtn.textContent = "수정";
+        editBtn.onclick = function () {
+            edit(li, span, editBtn);
+        };
+
+
+        const delBtn = document.createElement("button");
+        delBtn.textContent = "삭제";
+        delBtn.style.marginLeft = "5px";
+        delBtn.onclick = function () {
+            li.remove();
+        };
+
+        li.appendChild(span);
+        li.appendChild(editBtn);
+        li.appendChild(delBtn);
+
+        document.getElementById("todoList").appendChild(li);
+
+        todoInput.value = "";
+    }
+
+    function edit(li, span, btn) {
+        if (btn.textContent === "수정") {
+            const input = document.createElement("input");
+            input.type = "text";
+            input.value = span.textContent;
+
+            li.replaceChild(input, span);
+            btn.textContent = "완료";
+            input.focus();
+        } else {
+            const input = li.querySelector("input");
+            const newValue = input.value.trim();
+
+            if (newValue !== "") {
+                span.textContent = newValue;
+            }
+
+            li.replaceChild(span, input);
+            btn.textContent = "수정";
+        }
+    }
+
+    todoInput.addEventListener("keydown", function (event) {
+        if (event.key === "Enter") {
+         add();
+        }
+    });
+
+    </script>
+
+    
+</body>
+</html>
