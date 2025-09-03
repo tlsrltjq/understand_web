@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="ch5.css"> 
-    <title>점메추 등록</title>
+    <link rel="stylesheet" href="ch4.css"> 
+    <title>점메추</title>
 </head>
 <body>
     <h1>점심 메뉴 추천</h1>
     <form id="result" method="get">
-        <label for="menu">메뉴 이름</label><br><br>
-        <input type="text" id="menu" name="menu" placeholder="등록할 메뉴"><br><br><br><br>
-        <label for ="spicy">맵기 정도</label>
+        <label for ="spicy">맵기 정도는?</label>
         <select name="spicy" id="spicy">
             <option value="0">안 매움</option>
             <option value="1">조금 매움</option>
@@ -41,10 +39,9 @@
         <label for="mood">오늘의 기분은 ?</label><br><br>
         <input type="text" id="mood" name="mood" placeholder="기분을 입력하세요"><br><br><br><br>
 
-        <button type="submit"></button>
+        <input type="submit">추천 받기</button>
     </form>
 
-    <button id="fetchBtn">메뉴 불러오기</button>
     <script>
         //예산 레인지 조절
     const monInput = document.getElementById("price");
@@ -53,52 +50,20 @@
         monOutput.value = monInput.value;
     });
 
-    document.getElementById("result").addEventListener('submit', async function(event) {
-        event.preventDefault(); // 폼 제출 기본 동작 방지
-
-        const menu = document.getElementById('menu').value;
-        const spicy = document.getElementById('spicy').value;
+    document.getElementById("result").addEventListener('submit', async e => { //서밋누름
+	    e.preventDefault();//새로고침 방지
+	    const spicy = document.getElementById('spicy').value;
+        console.log("맵기 " + spicy);
         const price = document.getElementById('price').value;
-        const type = document.querySelector('input[name="type"]:checked') ? document.querySelector('input[name="type"]:checked').value : '';
+        console.log("예산 " + price);
+        const type = document.querySelector('input[name="type"]:checked')?.value || '선택 안 함';
+        console.log("음식종류 " + type);
         const mood = document.getElementById('mood').value;
+        console.log("기분 " + mood);
 
-        //메뉴 등록
-        try {
-            const res = await fetch("https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body : JSON.stringify({
-                    menu: menu,
-                    spicy: spicy,
-                    price : price,
-                    mood : mood,
-                    createAt:new Date().toISOString() 
-                })
+        fetch(`https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch`, {
+            method: 'GET',
             });
-            const data = await res.json();
-            console.log(data);  
-            alert("메뉴 등록 완료 : " + menu);
-
-        } catch (error) {
-            console.error("Error :", error);
-            alert("메뉴 등록 실패");
-        }
-    });
-
-    //메뉴 불러오기
-    try {
-        const fetchBtn = document.getElementById('fetchBtn');
-        fetchBtn.addEventListener('click', async () => {
-            const res = await fetch("https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch");
-            method: "GET"
-            const data = await res.json();
-            console.log(data);
-        });
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    }
 
     </script>
 </body>
