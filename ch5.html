@@ -9,97 +9,106 @@
 <body>
     <h1>점심 메뉴 추천</h1>
     <form id="result" method="get">
-        <label for="menu">메뉴 이름</label><br><br>
-        <input type="text" id="menu" name="menu" placeholder="등록할 메뉴"><br><br><br><br>
-        <label for ="spicy">맵기 정도</label>
+        <label for="menu">메뉴 이름</label><br>
+        <input type="text" id="menu" name="menu" placeholder="메뉴를 입력하세요" required><br><br>
+
+        <label for="spicy">맵기 정도는?</label>
         <select name="spicy" id="spicy">
-            <option value="0">안 매움</option>
-            <option value="1">조금 매움</option>
-            <option value="2">조금 더 매움</option>
-            <option value="3">매움</option>
-            <option value="4">많이 매움</option>
-            <option value="5">더 많이 매움</option>
-            <option value="6">못 먹을 정도로 매움</option>
-            <option value="7">매우 매움</option>
+            <option value="안 매움">안 매움</option>
+            <option value="조금 매움">조금 매움</option>
+            <option value="조금 더 매움">조금 더 매움</option>
+            <option value="매움">매움</option>
+            <option value="많이 매움">많이 매움</option>
+            <option value="더 많이 매움">더 많이 매움</option>
+            <option value="못 먹을 정도로 매움">못 먹을 정도로 매움</option>
+            <option value="매우 매움">매우 매움</option>
         </select><br><br>
 
         <label for="price">예산</label>
-        <input type="range" id="price" name="price" min="0" max="50000" step="1000" value="25000" oninput="this.nextElementSibling.value = this.value"><br>
+        <input type="range" id="price" name="price" min="0" max="50000" step="1000" value="25000" 
+               oninput="priceOutput.value = this.value"><br>
         <output id="priceOutput">25000</output>원<br><br>
-        
-        <label>음식 종류</label><br><br>
+
+        <label>음식 종류</label><br>
         <input type="radio" id="type_korean" name="type" value="한식">
-        <label for="type_korean">한식</label><br><br>
+        <label for="type_korean">한식</label><br>
         <input type="radio" id="type_chinese" name="type" value="중식">
-        <label for="type_chinese">중식</label><br><br>
+        <label for="type_chinese">중식</label><br>
         <input type="radio" id="type_japanese" name="type" value="일식">
-        <label for="type_japanese">일식</label><br><br>
+        <label for="type_japanese">일식</label><br>
         <input type="radio" id="type_western" name="type" value="양식">
         <label for="type_western">양식</label><br><br>
 
+        <label for="mood">오늘의 기분은?</label><br>
+        <input type="text" id="mood" name="mood" placeholder="기분을 입력하세요"><br><br>
 
-        <label for="mood">오늘의 기분은 ?</label><br><br>
-        <input type="text" id="mood" name="mood" placeholder="기분을 입력하세요"><br><br><br><br>
-
-        <button type="submit"></button>
+        <input type="submit" value="메뉴 등록">
     </form>
 
-    <button id="fetchBtn">메뉴 불러오기</button>
+    <button id="fetchBtn">메뉴 불러오기(console)</button>
+
     <script>
-        //예산 레인지 조절
-    const monInput = document.getElementById("price");
-    const monOutput = document.getElementById("priceOutput");
-    monInput.addEventListener('input', () => {
-        monOutput.value = monInput.value;
-    });
-
-    document.getElementById("result").addEventListener('submit', async function(event) {
-        event.preventDefault(); // 폼 제출 기본 동작 방지
-
-        const menu = document.getElementById('menu').value;
-        const spicy = document.getElementById('spicy').value;
-        const price = document.getElementById('price').value;
-        const type = document.querySelector('input[name="type"]:checked') ? document.querySelector('input[name="type"]:checked').value : '';
-        const mood = document.getElementById('mood').value;
-
-        //메뉴 등록
-        try {
-            const res = await fetch("https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body : JSON.stringify({
-                    menu: menu,
-                    spicy: spicy,
-                    price : price,
-                    mood : mood,
-                    createAt:new Date().toISOString() 
-                })
-            });
-            const data = await res.json();
-            console.log(data);  
-            alert("메뉴 등록 완료 : " + menu);
-
-        } catch (error) {
-            console.error("Error :", error);
-            alert("메뉴 등록 실패");
-        }
-    });
-
-    //메뉴 불러오기
-    try {
-        const fetchBtn = document.getElementById('fetchBtn');
-        fetchBtn.addEventListener('click', async () => {
-            const res = await fetch("https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch");
-            method: "GET"
-            const data = await res.json();
-            console.log(data);
+        // 예산 레인지 조절
+        const monInput = document.getElementById("price");
+        const monOutput = document.getElementById("priceOutput");
+        monInput.addEventListener('input', () => {
+            monOutput.value = monInput.value;
         });
-    } catch (error) {
-        console.error("Error fetching data:", error);
-    }
 
+        // 메뉴 등록
+        document.getElementById("result").addEventListener('submit', async function(event) {
+            event.preventDefault(); // 폼 제출 기본 동작 방지
+
+            const menu = document.getElementById('menu').value;
+            const spicy = document.getElementById('spicy').value;
+            const price = parseInt(document.getElementById('price').value, 10);
+            const types = document.querySelector('input[name="type"]:checked') 
+                          ? document.querySelector('input[name="type"]:checked').value 
+                          : '';
+            const mood = document.getElementById('mood').value;
+
+            try {
+                const res = await fetch("https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body : JSON.stringify({
+                        menu: menu,
+                        spicy: spicy,
+                        price: price,
+                        mood: mood,
+                        types: types,
+                        createdAt: new Date().toISOString()
+                    })
+                });
+                const data = await res.json();
+                console.log(data);  
+                alert("메뉴 등록 완료 : " + menu);
+
+            } catch (error) {
+                console.error("Error :", error);
+                alert("메뉴 등록 실패");
+            }
+        });
+
+        // 메뉴 불러오기
+        try {
+            const fetchBtn = document.getElementById('fetchBtn');
+            fetchBtn.addEventListener('click', async () => {
+                try {
+                    const res = await fetch("https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch", {
+                        method: "GET"
+                    });
+                    const data = await res.json();
+                    console.log(data);
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            });
+        } catch (error) {
+            console.error("Error:", error);
+        }
     </script>
 </body>
 </html>

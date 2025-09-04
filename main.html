@@ -3,68 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="ch4.css"> 
+    <link rel="stylesheet" href="main.css"> 
     <title>점메추</title>
 </head>
 <body>
     <h1>점심 메뉴 추천</h1>
+    <div class="container">
     <form id="result" method="get">
-        <label for ="spicy">맵기 정도는?</label>
+        <label for="spicy">맵기 정도는?</label>
         <select name="spicy" id="spicy">
-            <option value="0">안 매움</option>
-            <option value="1">조금 매움</option>
-            <option value="2">조금 더 매움</option>
-            <option value="3">매움</option>
-            <option value="4">많이 매움</option>
-            <option value="5">더 많이 매움</option>
-            <option value="6">못 먹을 정도로 매움</option>
-            <option value="7">매우 매움</option>
+            <option value="안 매움">안 매움</option>
+            <option value="조금 매움">조금 매움</option>
+            <option value="조금 더 매움">조금 더 매움</option>
+            <option value="매움">매움</option>
+            <option value="많이 매움">많이 매움</option>
+            <option value="더 많이 매움">더 많이 매움</option>
+            <option value="못 먹을 정도로 매움">못 먹을 정도로 매움</option>
+            <option value="매우 매움">매우 매움</option>
         </select><br><br>
 
         <label for="price">예산</label>
-        <input type="range" id="price" name="price" min="0" max="50000" step="1000" value="25000" oninput="this.nextElementSibling.value = this.value"><br>
-        <output id="priceOutput">25000</output>원<br><br>
+        <input type="range" id="price" name="price" min="0" max="50000" step="1000" value="25000"
+               oninput="priceOutput.value = this.value">
+        <output id="priceOutput">25000</output>원
+        <br><br>
         
-        <label>음식 종류</label><br><br>
+        <label>음식 종류</label><br>
         <input type="radio" id="type_korean" name="type" value="한식">
-        <label for="type_korean">한식</label><br><br>
+        <label for="type_korean">한식</label><br>
         <input type="radio" id="type_chinese" name="type" value="중식">
-        <label for="type_chinese">중식</label><br><br>
+        <label for="type_chinese">중식</label><br>
         <input type="radio" id="type_japanese" name="type" value="일식">
-        <label for="type_japanese">일식</label><br><br>
+        <label for="type_japanese">일식</label><br>
         <input type="radio" id="type_western" name="type" value="양식">
         <label for="type_western">양식</label><br><br>
 
+        <label for="mood">오늘의 기분은?</label><br>
+        <input type="text" id="mood" name="mood" placeholder="기분을 입력하세요"><br><br>
 
-        <label for="mood">오늘의 기분은 ?</label><br><br>
-        <input type="text" id="mood" name="mood" placeholder="기분을 입력하세요"><br><br><br><br>
-
-        <input type="submit">추천 받기</button>
+        <button type="submit">추천 받기</button>
     </form>
+    
 
+    <div id="resultTable"></div>
+</div>
     <script>
-        //예산 레인지 조절
+    // 예산 레인지 조절
     const monInput = document.getElementById("price");
     const monOutput = document.getElementById("priceOutput");
     monInput.addEventListener('input', () => {
         monOutput.value = monInput.value;
     });
 
-    document.getElementById("result").addEventListener('submit', async e => { //서밋누름
-	    e.preventDefault();//새로고침 방지
-	    const spicy = document.getElementById('spicy').value;
-        console.log("맵기 " + spicy);
-        const price = document.getElementById('price').value;
-        console.log("예산 " + price);
-        const type = document.querySelector('input[name="type"]:checked')?.value || '선택 안 함';
-        console.log("음식종류 " + type);
-        const mood = document.getElementById('mood').value;
-        console.log("기분 " + mood);
+    document.getElementById("result").addEventListener('submit', async e => {
+        e.preventDefault(); // 새로고침 방지
 
-        fetch(`https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch`, {
-            method: 'GET',
+        const spicy = document.getElementById('spicy').value;
+        console.log("맵기:", spicy);
+        const price = document.getElementById('price').value;
+        console.log("예산:", price);
+        const types = document.querySelector('input[name="type"]:checked')?.value || '선택 안 함';
+        console.log("음식 종류:", types);
+        const mood = document.getElementById('mood').value;
+        console.log("기분:", mood);
+
+        const query = new URLSearchParams({
+            spicy: spicy,
+            price: price,
+            types: types,
+            mood: mood
+        }).toString();
+
+        const url = 'https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch?' + query;
+
+        try {
+            const res = await fetch(url);
+            const data = await res.json();
+
+            let tableHTML = `
+                <table border="1" cellpadding="5" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>메뉴 이름</th>
+                            <th>맵기 정도</th>
+                            <th>예산</th>
+                            <th>음식 종류</th>
+                            <th>기분</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach(item => {
+                tableHTML += `
+                    <tr>
+                        <td><a href='detail.html' >${item.menu || ''}</a></td>
+                        <td>${item.spicy || ''}</td>
+                        <td>${item.price || ''}</td>
+                        <td>${item.types || ''}</td>
+                        <td>${item.mood || ''}</td>
+                    </tr>
+                `;
             });
 
-    </script>
+            tableHTML += `
+                    </tbody>
+                </table>
+            `;
+
+            document.getElementById('resultTable').innerHTML = tableHTML;
+
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            document.getElementById('resultTable').innerHTML = "<p>데이터를 불러오지 못했습니다.</p>";
+        }
+    });
+</script>
+
 </body>
 </html>
