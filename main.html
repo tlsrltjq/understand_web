@@ -97,7 +97,7 @@
             data.forEach(item => {
                 tableHTML += `
                     <tr>
-                        <td><a href='detail.html' >${item.menu || ''}</a></td>
+                        <td><a href="detail.html?id=${item.id}" target='_blank'>${item.menu}</a></td>
                         <td>${item.spicy || ''}</td>
                         <td>${item.price || ''}</td>
                         <td>${item.types || ''}</td>

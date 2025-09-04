@@ -1,11 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>메뉴 상세</title>
 </head>
 <body>
-    
+    <h1 id="menuName"></h1>
+    <div id="menuDetail"></div>
+
+    <script>
+        async function loadDetail() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+
+            if (!id) {
+                document.body.innerHTML = "<p>잘못된 접근입니다.</p>";
+                return;
+            }
+
+            const url = `https://6863bafe88359a373e960f61.mockapi.io/sparta/web/lunch/${id}`;
+
+            try {
+                const res = await fetch(url);
+                const data = await res.json();
+
+                // 메뉴 이름 출력
+                document.getElementById('menuName').textContent = data.menu;
+
+                // 상세 정보 출력
+                document.getElementById('menuDetail').innerHTML = `
+                    <p>메뉴 ID: ${data.id}</p>
+                    <p>맵기: ${data.spicy}</p>
+                    <p>예산: ${data.price}</p>
+                    <p>종류: ${data.types}</p>
+                    <p>기분: ${data.mood}</p>
+                    <p>생성시간: ${data.createdAt}</p>
+
+                `;
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                document.body.innerHTML = "<p>데이터를 불러오지 못했습니다.</p>";
+            }
+        }
+
+        loadDetail();
+    </script>
 </body>
 </html>
